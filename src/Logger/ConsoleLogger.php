@@ -58,11 +58,19 @@ class ConsoleLogger extends AbstractLogger implements LoggerInterface
         }
 
         $logLine = sprintf('%s%s%s%s', $color, $prefix, $message, $stop);
-        error_log($logLine);
+        if (defined('STDERR') && is_resource(STDERR)) {
+            fwrite(STDERR, $logLine . PHP_EOL);
+        } else {
+            error_log($logLine);
+        }
 
         if ($this->debug) {
             if ($exception) {
-                error_log($exception->getTraceAsString());
+                if (defined('STDERR') && is_resource(STDERR)) {
+                    fwrite(STDERR, $exception->getTraceAsString() . PHP_EOL);
+                } else {
+                    error_log($exception->getTraceAsString());
+                }
             } elseif (!empty($logLine)) {
                 $stack = explode(PHP_EOL, (new \Exception())->getTraceAsString());
                 // self
@@ -70,7 +78,11 @@ class ConsoleLogger extends AbstractLogger implements LoggerInterface
                 // AbstractLogger
                 array_shift($stack);
                 foreach ($stack as $line) {
-                    error_log($line);
+                    if (defined('STDERR') && is_resource(STDERR)) {
+                        fwrite(STDERR, $line . PHP_EOL);
+                    } else {
+                        error_log($line);
+                    }
                 }
             }
         }

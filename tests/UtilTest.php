@@ -43,10 +43,10 @@ class UtilTest extends OpenApiTestCase
     public function testFinder()
     {
         // Create a finder for one of the example directories that has a subdirectory.
-        $finder = (new Finder())->in(__DIR__ . '/../Examples/using-traits');
+        $finder = (new Finder())->in(realpath(__DIR__ . '/../Examples/using-traits'));
         $this->assertGreaterThan(0, iterator_count($finder), 'There should be at least a few files and a directory.');
         $finder_array = \iterator_to_array($finder);
-        $directory_path = __DIR__ . '/../Examples/using-traits/Decoration';
+        $directory_path = realpath(__DIR__ . '/../Examples/using-traits/Decoration');
         $this->assertArrayHasKey($directory_path, $finder_array, 'The directory should be a path in the finder.');
         // Use the Util method that should set the finder to only find files, since swagger-php only needs files.
         $finder_result = Util::finder($finder);

@@ -50,6 +50,15 @@ class OpenApiTestCase extends TestCase
         parent::tearDown();
     }
 
+    public static function assertObjectHasAttribute(string $attributeName, object $object, string $message = ''): void
+    {
+        if (method_exists(parent::class, 'assertObjectHasProperty')) {
+            parent::assertObjectHasProperty($attributeName, $object, $message);
+        } else {
+            parent::assertObjectHasAttribute($attributeName, $object, $message);
+        }
+    }
+
     public function getTrackingLogger(): ?LoggerInterface
     {
         return new class($this) extends AbstractLogger {
@@ -128,6 +137,10 @@ class OpenApiTestCase extends TestCase
                 $this->assertSpecEquals(((array) $actual)[$key], $value, $message . ' > ' . $key, true);
             }
         } else {
+            if (is_string($actual) && is_string($expected)) {
+                $actual = str_replace("\r\n", "\n", $actual);
+                $expected = str_replace("\r\n", "\n", $expected);
+            }
             $this->assertEquals($actual, $expected, $message);
         }
     }
