@@ -77,7 +77,7 @@ class Analysis
      */
     private static $processors;
 
-    public function __construct(array $annotations = [], Context $context = null)
+    public function __construct(array $annotations = [], ?Context $context = null)
     {
         $this->annotations = new \SplObjectStorage();
         $this->context = $context;

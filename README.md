@@ -1,129 +1,54 @@
-[![Build Status](https://img.shields.io/github/workflow/status/zircote/swagger-php/build?style=flat-square)](https://github.com/zircote/swagger-php/actions?query=workflow:build)
-[![Total Downloads](https://img.shields.io/packagist/dt/zircote/swagger-php.svg?style=flat-square)](https://packagist.org/packages/zircote/swagger-php)
-[![License](https://img.shields.io/badge/license-Apache2.0-blue.svg?style=flat-square)](LICENSE-2.0.txt)
+# braadiv/swagger-php
 
-# swagger-php
+> **⚠️ This is a PHP 8.4 compatibility fork — NOT an original work.**
 
-Generate interactive [OpenAPI](https://www.openapis.org) documentation for your RESTful API using [doctrine annotations](https://www.doctrine-project.org/projects/doctrine-annotations/en/latest/index.html).
+## Credits & Attribution
 
-For a full list of supported annotations, please have look at the [`OpenApi\Annotations` namespace](src/Annotations) or the [documentation website](https://zircote.github.io/swagger-php/Supported-annotations.html).
+This package is a **modernized fork** of the original [`zircote/swagger-php`](https://github.com/zircote/swagger-php.git), created and maintained by **Robert Allen, Bob Fanger, and Martin Rademacher**.
 
-## Features
+**All original code, design, and intellectual property belong to the original author(s).**
 
-- Compatible with the OpenAPI 3.0 specification.
-- Extracts information from code & existing phpdoc annotations.
-- Command-line interface available.
-- [Documentation site](https://zircote.github.io/swagger-php/) with a getting started guide.
-- Exceptional error reporting (with hints, context)
+The only modifications made in this fork are:
+- Fixing PHP 8.4 deprecation warnings (`implicit nullable parameters` in `Analysis.php` and `Annotations\OpenApi.php`)
+- Adding `#[\AllowDynamicProperties]` to `Context.php`
+- Updating `composer.json` to support PHP 8.1–8.4 LTS
+- Adding `"replace": {"zircote/swagger-php": "self.version"}` as a drop-in replacement
+- Retaining 100% backward compatibility as a drop-in replacement
 
-## Installation (with [Composer](https://getcomposer.org))
+---
 
-```bash
-composer require zircote/swagger-php
-```
+## Why this fork?
 
-For cli usage from anywhere install swagger-php globally and make sure to place the `~/.composer/vendor/bin` directory in your PATH so the `openapi` executable can be located by your system.
+Legacy packages and Yii2 OpenAPI extensions (such as `genxoft/yii2-oas3`) rely on the 3.x series of `zircote/swagger-php`. Under PHP 8.4 LTS, implicit nullable parameters and dynamic properties trigger `E_DEPRECATED` warnings. This fork provides a **safe, drop-in replacement** under PHP 8.4.
 
-```bash
-composer global require zircote/swagger-php
-```
+---
 
-## Usage
-
-Add annotations to your php files.
-
-```php
-/**
- * @OA\Info(title="My First API", version="0.1")
- */
-
-/**
- * @OA\Get(
- *     path="/api/resource.json",
- *     @OA\Response(response="200", description="An example resource")
- * )
- */
-```
-
-Visit the [Documentation website](https://zircote.github.io/swagger-php/) for the [Getting started guide](https://zircote.github.io/swagger-php/Getting-started.html) or look at the [Examples directory](Examples/) for more examples.
-
-### Usage from php
-
-Generate always-up-to-date documentation.
-
-```php
-<?php
-require("vendor/autoload.php");
-$openapi = \OpenApi\Generator::scan(['/path/to/project']);
-header('Content-Type: application/x-yaml');
-echo $openapi->toYaml();
-```
-Documentation of how to use the `Generator` class can be found in the [Generator Migration](https://zircote.github.io/swagger-php/Generator-migration.html) guide.
-
-### Usage from the Command Line Interface
-
-The `openapi` command line interface can be used to generate the documentation to a static yaml/json file.
+## Installation
 
 ```bash
-./vendor/bin/openapi --help
+composer require braadiv/swagger-php
 ```
 
-### Usage from the Deserializer
+## Original Package Information
 
-Generate the OpenApi annotation object from a json string, which makes it easier to manipulate objects programmatically.
+| | |
+|:--|:--|
+| **Original Package** | [`zircote/swagger-php`](https://github.com/zircote/swagger-php) |
+| **Original Version** | `3.3.4` |
+| **Original Authors** | Robert Allen, Bob Fanger, Martin Rademacher |
+| **Original License** | `Apache-2.0` |
+| **Fork Maintainer** | `braadiv` ([github.com/braadiv](https://github.com/braadiv)) |
+| **PHP Compatibility** | `>=8.1 || ^8.2 || ^8.3 || ^8.4` |
 
-```php
-<?php
+---
 
-use OpenApi\Serializer;
+## Changes from Original
 
-$serializer = new Serializer();
-$openapi = $serializer->deserialize($jsonString, 'OpenApi\Annotations\OpenApi');
-echo $openapi->toJson();
-```
+See [CHANGELOG.md](../CHANGELOG.md) for a detailed list of all modifications.
 
-### Usage from [docker](https://docker.com)
+---
 
-Generate the swagger documentation to a static json file.
+## License
 
-```
-docker run -v "$PWD":/app -it tico/swagger-php --help
-```
-
-## More on OpenApi & Swagger
-
-- https://swagger.io
-- https://www.openapis.org
-- [OpenApi Documentation](https://swagger.io/docs/)
-- [OpenApi Specification](http://swagger.io/specification/)
-- [Related projects](docs/Related-projects.md)
-
-## Contributing
-
-Feel free to submit [Github Issues](https://github.com/zircote/swagger-php/issues)
-or pull requests.
-
-The documentation website is build from the [docs](docs/) folder with [vuepress](https://vuepress.vuejs.org).
-
-Make sure pull requests pass [PHPUnit](https://phpunit.de/)
-and [PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) (PSR-2) tests.
-
-### To run both unit tests and linting execute:
-```bash
-composer test
-```
-
-### Running unit tests only:
-```bash
-./bin/phpunit
-```
-
-### Running linting only:
-```bash
-composer lint
-```
-
-### To make `php-cs-fixer` fix linting errors:
-```bash
-composer cs
-```
+This fork retains the **same license** as the original package (`Apache-2.0`).
+All rights and credits belong to the original authors.
